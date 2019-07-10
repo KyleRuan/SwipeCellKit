@@ -49,6 +49,17 @@ public protocol SwipeCollectionViewCellDelegate: class {
      - parameter orientation: The side of the item.
      */
     func collectionView(_ collectionView: UICollectionView, willBeginEditingItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation)
+
+
+
+    /// Tells the delegate that the collection view should Recognize the pan gesture
+    ///
+    /// - Parameters:
+    ///   - collectionView: The collection view object providing this information.
+    ///   - indexPath:  The index path of the item.
+    ///   - orientation: The side of the item.
+    /// - Returns: should Recognize the pan  gesture
+    func collectionView(_ collectionView: UICollectionView, shouldRecognizeItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> Bool
     
     /**
      Tells the delegate that the collection view has left editing mode.
@@ -87,5 +98,9 @@ public extension SwipeCollectionViewCellDelegate {
     
     func visibleRect(for collectionView: UICollectionView) -> CGRect? {
         return nil
+    }
+
+    func collectionView(_ collectionView: UICollectionView, shouldRecognizeItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> Bool {
+        return true
     }
 }

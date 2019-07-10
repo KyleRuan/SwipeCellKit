@@ -23,6 +23,9 @@ protocol SwipeControllerDelegate: class {
     func swipeController(_ controller: SwipeController, didDeleteSwipeableAt indexPath: IndexPath)
     
     func swipeController(_ controller: SwipeController, visibleRectFor scrollView: UIScrollView) -> CGRect?
+
+
+    func swipeController(_ controller: SwipeController, shouldRecognize orientation: SwipeActionsOrientation) -> Bool
     
 }
 
@@ -65,6 +68,7 @@ class SwipeController: NSObject {
 
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
         guard let target = actionsContainerView, var swipeable = self.swipeable else { return }
+
         
         let velocity = gesture.velocity(in: target)
         
@@ -361,8 +365,16 @@ extension SwipeController: UIGestureRecognizerDelegate {
         if gestureRecognizer == panGestureRecognizer,
             let view = gestureRecognizer.view,
             let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
-            let translation = gestureRecognizer.translation(in: view)
-            return abs(translation.y) <= abs(translation.x)
+            let velocity = gestureRecognizer.translation(in: view)
+            let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
+            let shouldRecognize = self.delegate?.swipeController(self, shouldRecognize: orientation) ?? true
+            if shouldRecognize {
+                let translation = gestureRecognizer.translation(in: view)
+                return abs(translation.y) <= abs(translation.x)
+            } else {
+                return shouldRecognize
+            }
+
         }
         
         return true

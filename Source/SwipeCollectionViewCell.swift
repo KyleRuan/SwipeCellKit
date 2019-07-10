@@ -197,6 +197,7 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
 }
 
 extension SwipeCollectionViewCell: SwipeControllerDelegate {
+
     func swipeController(_ controller: SwipeController, canBeginEditingSwipeableFor orientation: SwipeActionsOrientation) -> Bool {
         return true
     }
@@ -241,5 +242,14 @@ extension SwipeCollectionViewCell: SwipeControllerDelegate {
     func swipeController(_ controller: SwipeController, didDeleteSwipeableAt indexPath: IndexPath) {
         collectionView?.deleteItems(at: [indexPath])
     }
+
+    func swipeController(_ controller: SwipeController, shouldRecognize orientation: SwipeActionsOrientation) -> Bool {
+        guard let collectionView = collectionView, let indexPath = collectionView.indexPath(for: self) else { return true }
+        if self.state.isActive {
+            return true
+        }
+        return delegate?.collectionView(collectionView, shouldRecognizeItemAt: indexPath, for: orientation) ?? true
+    }
+
 }
 

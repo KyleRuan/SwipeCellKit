@@ -224,4 +224,10 @@ extension SwipeTableViewCell: SwipeControllerDelegate {
     func swipeController(_ controller: SwipeController, didDeleteSwipeableAt indexPath: IndexPath) {
         tableView?.deleteRows(at: [indexPath], with: .none)
     }
+
+    func swipeController(_ controller: SwipeController, shouldRecognize orientation: SwipeActionsOrientation) -> Bool {
+
+        return true
+    }
+    
 }
